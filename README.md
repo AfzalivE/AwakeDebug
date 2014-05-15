@@ -5,6 +5,10 @@ AwakeDebug
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
 </a>
 
+<p align="left">
+  <img src="/design/latest_playstore.png" alt="Messages screen (Phone)" height="30%" width="30%"/>
+</p>
+
 
 This app allows you to keep your screen on when the device is connected to USB and Debugging (ADB) is enabled.
 
