@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Awake for Debug</string>
+    <string name="intro_1">This app allows you to keep your screen on when the device is connected to USB and Debugging is enabled.</string>
+    <string name="intro_2">It switches to the previously set display timeout when the device is unplugged.</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
