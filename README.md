@@ -1,5 +1,11 @@
 AwakeDebug
 ==========
+<a href="https://play.google.com/store/apps/details?id=com.afzaln.awakedebug">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
+</a>
+
+
 This app allows you to keep your screen on when the device is connected to USB and Debugging (ADB) is enabled.
 
 It switches to the previously set display timeout when the device is unplugged.
