@@ -27,8 +27,9 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         }
     }
 
-    public static void toggleStayAwake(Context context) {IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = context.registerReceiver(null, filter);
+    public static void toggleStayAwake(Context context) {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = context.getApplicationContext().registerReceiver(null, filter);
 
         int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
