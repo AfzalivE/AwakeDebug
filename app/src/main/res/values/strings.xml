@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">Awake for Debug</string>
-    <string name="intro_1">This app allows you to keep your screen on when the device is connected to USB and Debugging is enabled.</string>
-    <string name="intro_2">It switches to the previously set display timeout when the device is unplugged.</string>
+    <string name="intro_1">This app allows you to keep your screen on only when the device is connected to USB and Debugging is enabled.</string>
+    <string name="intro_2">It switches to the previously set display timeout when the device is unplugged or if it\'s plugged to the wall.</string>
     <string name="action_settings">Settings</string>
 
 </resources>
