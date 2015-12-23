@@ -11,16 +11,16 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 
+import timber.log.Timber;
+
 /**
  * Receives the power connected/disconnected intents from the system
  */
 public class PowerConnectionReceiver extends BroadcastReceiver {
-    private static final String TAG = PowerConnectionReceiver.class.getSimpleName();
-
     @Override
     public void onReceive(Context context, Intent intent) {
         boolean isEnabled = getPrefEnabled(context.getApplicationContext());
-        Log.d(TAG, "getPrefEnabled: " + isEnabled);
+        Timber.d("getPrefEnabled: " + isEnabled);
 
         if (isEnabled) {
             toggleStayAwake(context);
@@ -58,8 +58,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
 
     public static void enableStayAwake(Context context) {
         int timeout = getScreenOffTimeout(context);
-        if (timeout != Integer.MAX_VALUE)
-        {
+        if (timeout != Integer.MAX_VALUE) {
             changeScreenOffTimeout(context, Integer.MAX_VALUE, timeout);
         }
     }
@@ -74,7 +73,9 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
     }
 
     private static void setScreenOffTimeout(Context context, int timeout) {
-        Settings.System.putInt(context.getContentResolver(), "screen_off_timeout", timeout);
+        if (hasPermission(context)) {
+            Settings.System.putInt(context.getContentResolver(), "screen_off_timeout", timeout);
+        }
     }
 
     private static int getScreenOffTimeout(Context context) {
@@ -82,7 +83,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
             int timeout = Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
             return timeout;
         } catch (SettingNotFoundException e) {
-            Log.e(TAG, e.getMessage(), e);
+            Timber.e(e.getMessage(), e);
         }
 
         return 0;
@@ -93,7 +94,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
     }
 
     private static void setPrefSavedTimeout(Context context, int timeout) {
-        Log.d(TAG, "savedTimeout = " + timeout);
+        Timber.d("savedTimeout = " + timeout);
         PreferenceManager.getDefaultSharedPreferences(context).edit().putInt("AwakeDebug", timeout).commit();
     }
 
@@ -102,7 +103,14 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
     }
 
     public static void setPrefEnabled(Context context, boolean isEnabled) {
-        Log.d(TAG, "setPrefEnabled: " + isEnabled);
+        Timber.d("setPrefEnabled: " + isEnabled);
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("AwakeDebugEnabled", isEnabled).commit();
+    }
+
+    public static boolean hasPermission(Context context) {
+        if (VERSION.SDK_INT >= VERSION_CODES.M && !Settings.System.canWrite(context)) {
+            return false;
+        }
+        return true;
     }
 }

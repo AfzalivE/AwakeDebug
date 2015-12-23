@@ -2,4 +2,5 @@
 <resources>
     <color name="action_bar">#263238</color>
     <color name="switch_bar">#37474f</color>
+    <color name="status_bar">#21272c</color>
 </resources>

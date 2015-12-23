@@ -1,13 +1,23 @@
 package com.afzaln.awakedebug;
 
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int WRITE_SETTINGS_REQUEST = 1;
+    private SwitchCompat mActionBarSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,19 +25,25 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        SwitchCompat actionBarSwitch = (SwitchCompat) findViewById(R.id.toggle);
+        mActionBarSwitch = (SwitchCompat) findViewById(R.id.toggle);
 
         boolean state = PowerConnectionReceiver.getPrefEnabled(getApplicationContext());
-        actionBarSwitch.setChecked(state);
+        mActionBarSwitch.setChecked(state);
         if (state) {
-            actionBarSwitch.setText("On");
+            mActionBarSwitch.setText("On");
         } else {
-            actionBarSwitch.setText("Off");
+            mActionBarSwitch.setText("Off");
         }
 
-        actionBarSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        mActionBarSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!PowerConnectionReceiver.hasPermission(buttonView.getContext())) {
+                    showPermissionRequestDialog();
+                    mActionBarSwitch.setChecked(false);
+                    return;
+                }
+
                 PowerConnectionReceiver.setPrefEnabled(getApplicationContext(), isChecked);
                 if (!isChecked) {
                     buttonView.setText("Off");
@@ -38,5 +54,53 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == WRITE_SETTINGS_REQUEST) {
+            if (!PowerConnectionReceiver.hasPermission(this)) {
+                mActionBarSwitch.setChecked(false);
+                new AlertDialog.Builder(this)
+                        .setMessage("Awake for Debug will not function without it.")
+                        .setTitle("Permission not granted")
+                        .setPositiveButton("OK", new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            } else {
+                mActionBarSwitch.setChecked(true);
+                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void showPermissionRequestDialog() {
+        new AlertDialog.Builder(this)
+                .setMessage("Awake for Debug needs permission to modify system settings to change the screen timeout.")
+                .setTitle("Permission request")
+                .setPositiveButton("Continue", new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showPermissionActivity();
+                    }
+                })
+                .setNegativeButton("Cancel", new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mActionBarSwitch.setChecked(false);
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    public void showPermissionActivity() {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+        intent.setData(Uri.fromParts("package", getPackageName(), null));
+        startActivityForResult(intent, WRITE_SETTINGS_REQUEST);
     }
 }
