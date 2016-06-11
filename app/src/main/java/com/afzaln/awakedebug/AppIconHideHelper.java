@@ -10,6 +10,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 /**
+ * This allows the user to remove the app icon from the launcher.
+ *
  * Created by Dan Mercer (Github: drmercer) on 6/11/16.
  */
 public class AppIconHideHelper implements CompoundButton.OnCheckedChangeListener {
@@ -34,6 +36,7 @@ public class AppIconHideHelper implements CompoundButton.OnCheckedChangeListener
         mCheckBox.setEnabled(enabled);
         if (!enabled) {
             mCheckBox.setChecked(false);
+            mDialogHasBeenSeen = false; // Clear flag so that the dialog can reappear
         }
     }
 
@@ -47,6 +50,7 @@ public class AppIconHideHelper implements CompoundButton.OnCheckedChangeListener
         // Show warning dialog on first time
         if (!mDialogHasBeenSeen && isChecked) {
             mDialogHasBeenSeen = true;
+            mCheckBox.setChecked(false); // Un-check the CheckBox (in case they dismiss the dialog)
 
             AlertDialog.Builder db = new AlertDialog.Builder(mActivity);
             db.setMessage(R.string.icon_warning);
@@ -56,6 +60,7 @@ public class AppIconHideHelper implements CompoundButton.OnCheckedChangeListener
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     changeIconVisibility(true); // Hide icon
+                    mCheckBox.setChecked(true); // Re-check the CheckBox
                 }
             });
 
@@ -63,7 +68,6 @@ public class AppIconHideHelper implements CompoundButton.OnCheckedChangeListener
             db.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mCheckBox.setChecked(false); // Un-check the CheckBox
                     mDialogHasBeenSeen = false; // Clear flag.
                 }
             });
