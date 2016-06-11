@@ -68,4 +68,15 @@
         android:textStyle="italic"
         android:fontFamily="sans-serif-condensed" />
 
+    <CheckBox
+        android:id="@+id/app_icon_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:padding="8dp"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/icon_checkbox_text" />
+
 </LinearLayout>

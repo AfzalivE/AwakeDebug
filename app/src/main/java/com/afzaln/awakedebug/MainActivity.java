@@ -9,6 +9,7 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int WRITE_SETTINGS_REQUEST = 1;
     private SwitchCompat mActionBarSwitch;
+    private AppIconHideHelper mIconHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +27,16 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        // set up the "Hide app icon" checkbox
+        CheckBox checkBox = (CheckBox) findViewById(R.id.app_icon_checkbox);
+        mIconHelper = new AppIconHideHelper(this);
+        mIconHelper.setCheckBox(checkBox);
+
         mActionBarSwitch = (SwitchCompat) findViewById(R.id.toggle);
 
         boolean state = PowerConnectionReceiver.getPrefEnabled(getApplicationContext());
         mActionBarSwitch.setChecked(state);
+        mIconHelper.setCheckBoxEnabled(state); // Only enable "Hide app icon" if state is turned on.
         if (state) {
             mActionBarSwitch.setText("On");
         } else {
@@ -43,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     mActionBarSwitch.setChecked(false);
                     return;
                 }
+                mIconHelper.setCheckBoxEnabled(isChecked);
 
                 PowerConnectionReceiver.setPrefEnabled(getApplicationContext(), isChecked);
                 if (!isChecked) {
@@ -54,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        mIconHelper.startListeningForChanges();
     }
 
     @Override
