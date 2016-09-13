@@ -6,4 +6,10 @@
     <string name="intro_2">It switches to the previously set display timeout when the device is unplugged or if it\'s plugged to the wall.</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Text dealing with the "Hide app icon" checkbox. -->
+    <string name="icon_checkbox_text">Remove app icon from launcher.</string>
+    <string name="icon_warning">Awake for Debug will continue to work in the background, but you will have to uninstall and reinstall the app if you want to get the app icon back in the launcher. Continue?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
 </resources>
