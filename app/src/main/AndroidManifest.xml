@@ -36,6 +36,11 @@
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
             </intent-filter>
         </receiver>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="ca849bf6cdd88797c30d095ddef12b71cc2ce64c" />
+
     </application>
 
 </manifest>

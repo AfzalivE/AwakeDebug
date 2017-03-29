@@ -11,5 +11,20 @@
     <string name="icon_warning">Awake for Debug will continue to work in the background, but you will have to uninstall and reinstall the app if you want to get the app icon back in the launcher. Continue?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="on_ac_desc">On when connected to AC</string>
+
+    <!-- SharedPref key which controls if to stay awake when connected to AC -->
+    <string name="sharedpref_ac_key">on_ac</string>
+
+    <!-- Shortcut strings -->
+    <string name="awake_disabled">Awake Disabled</string>
+    <string name="awake_toggle_long">Toggle Stay Awake Mode</string>
+    <string name="awake_toggle_short">Toggle Awake</string>
+
+    <string name="awake_ac_disabled">Awake AC Disabled</string>
+    <string name="awake_ac_toggle_long">Toggle AC Stay Awake Mode</string>
+    <string name="awake_ac_toggle_short">Toggle AC Awake</string>
+    <string name="awake_key">toggle_awake</string>
+    <string name="awake_ac_key">toggle_ac_awake</string>
 
 </resources>

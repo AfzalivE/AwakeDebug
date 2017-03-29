@@ -32,7 +32,8 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         Intent batteryStatus = context.getApplicationContext().registerReceiver(null, filter);
 
         int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
+        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB ||
+                (chargePlug == BatteryManager.BATTERY_PLUGGED_AC && Utils.getAcPowerOn(context));
 
         int adb;
         if (VERSION.SDK_INT < VERSION_CODES.JELLY_BEAN_MR1) {

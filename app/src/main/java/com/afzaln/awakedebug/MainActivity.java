@@ -3,7 +3,11 @@ package com.afzaln.awakedebug;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +17,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
+
+import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -33,9 +39,11 @@ public class MainActivity extends AppCompatActivity {
         mIconHelper.setCheckBox(checkBox);
 
         mActionBarSwitch = (SwitchCompat) findViewById(R.id.toggle);
+        SwitchCompat acSwitch = (SwitchCompat) findViewById(R.id.toggle_ac);
 
-        boolean state = PowerConnectionReceiver.getPrefEnabled(getApplicationContext());
+        final boolean state = PowerConnectionReceiver.getPrefEnabled(this);
         mActionBarSwitch.setChecked(state);
+        acSwitch.setChecked(Utils.getAcPowerOn(this));
         mIconHelper.setCheckBoxEnabled(state); // Only enable "Hide app icon" if state is turned on.
         if (state) {
             mActionBarSwitch.setText("On");
@@ -53,17 +61,82 @@ public class MainActivity extends AppCompatActivity {
                 }
                 mIconHelper.setCheckBoxEnabled(isChecked);
 
-                PowerConnectionReceiver.setPrefEnabled(getApplicationContext(), isChecked);
+                PowerConnectionReceiver.setPrefEnabled(MainActivity.this, isChecked);
                 if (!isChecked) {
                     buttonView.setText("Off");
-                    PowerConnectionReceiver.disableStayAwake(getApplicationContext());
                 } else {
                     buttonView.setText("On");
-                    PowerConnectionReceiver.toggleStayAwake(getApplicationContext());
                 }
+
+                toggleAwake(isChecked);
+                initShortcuts(isChecked);
             }
         });
+
+        acSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Utils.setAcPowerOn(MainActivity.this, isChecked);
+                toggleAwake(mActionBarSwitch.isChecked());
+                initShortcuts(state);
+            }
+        });
+
         mIconHelper.startListeningForChanges();
+
+        initShortcuts(state);
+
+        if (getIntent() != null && getIntent().getAction().equals(Intent.ACTION_RUN)) {
+            if (getIntent().hasExtra(getString(R.string.awake_key))) {
+                PowerConnectionReceiver.setPrefEnabled(MainActivity.this, !state);
+                toggleAwake(!state);
+                initShortcuts(!state);
+            } else if (getIntent().hasExtra(getString(R.string.awake_ac_key))) {
+                Utils.setAcPowerOn(MainActivity.this, !Utils.getAcPowerOn(this));
+                toggleAwake(Utils.getAcPowerOn(this));
+                initShortcuts(state);
+            }
+            finish();
+        }
+
+    }
+
+    private void initShortcuts(boolean state) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setAction(Intent.ACTION_RUN);
+            intent.putExtra(getString(R.string.awake_key), state);
+
+            ShortcutInfo shortcut = new ShortcutInfo.Builder(this, "id1")
+                    .setShortLabel(getString(R.string.awake_toggle_short))
+                    .setLongLabel(getString(R.string.awake_toggle_long))
+                    .setIcon(Icon.createWithResource(this, state ? R.drawable.ic_check_box : R.drawable.ic_check_box_blank))
+                    .setIntent(intent)
+                    .build();
+
+            Intent intentAc = new Intent(this, MainActivity.class);
+            intentAc.setAction(Intent.ACTION_RUN);
+            intentAc.putExtra(getString(R.string.awake_ac_key), Utils.getAcPowerOn(this));
+
+            ShortcutInfo shortcutAc = new ShortcutInfo.Builder(this, "id2")
+                    .setShortLabel(getString(R.string.awake_ac_toggle_short))
+                    .setLongLabel(getString(R.string.awake_ac_toggle_long))
+                    .setIcon(Icon.createWithResource(this, Utils.getAcPowerOn(this) ? R.drawable.ic_check_box : R.drawable.ic_check_box_blank))
+                    .setIntent(intentAc)
+                    .build();
+
+            shortcutManager.setDynamicShortcuts(Arrays.asList(shortcut, shortcutAc));
+        }
+    }
+
+    private void toggleAwake(boolean isChecked) {
+        if (isChecked) {
+            PowerConnectionReceiver.toggleStayAwake(getApplicationContext());
+        } else {
+            PowerConnectionReceiver.disableStayAwake(getApplicationContext());
+        }
     }
 
     @Override
