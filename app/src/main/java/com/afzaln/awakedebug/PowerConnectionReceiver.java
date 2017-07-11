@@ -32,8 +32,16 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         Intent batteryStatus = context.getApplicationContext().registerReceiver(null, filter);
 
         int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB ||
-                (chargePlug == BatteryManager.BATTERY_PLUGGED_AC && Utils.getAcPowerOn(context));
+        boolean usbCharge;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB ||
+                    chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS ||
+                    (chargePlug == BatteryManager.BATTERY_PLUGGED_AC && Utils.getAcPowerOn(context));
+        } else {
+            usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB ||
+                    (chargePlug == BatteryManager.BATTERY_PLUGGED_AC && Utils.getAcPowerOn(context));
+        }
 
         int adb;
         if (VERSION.SDK_INT < VERSION_CODES.JELLY_BEAN_MR1) {
