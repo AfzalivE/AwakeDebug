@@ -5,4 +5,11 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="DarkToolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:background">@color/action_bar</item>
+    </style>
+
+    <style name="SwitchTheme" parent="Base.Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:background">@color/switch_bar</item>
+    </style>
 </resources>

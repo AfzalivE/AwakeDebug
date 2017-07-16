@@ -26,9 +26,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mActionBarSwitch = (SwitchCompat) findViewById(R.id.toggle);
+        SwitchCompat acSwitch = (SwitchCompat) findViewById(R.id.toggle_ac);
 
-        boolean state = PowerConnectionReceiver.getPrefEnabled(getApplicationContext());
+        final boolean state = PrefUtils.isAwakeDebugEnabled(this);
         mActionBarSwitch.setChecked(state);
+        acSwitch.setChecked(PrefUtils.isAwakeAcEnabled(this));
+
         if (state) {
             mActionBarSwitch.setText("On");
         } else {
@@ -44,16 +47,28 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                PowerConnectionReceiver.setPrefEnabled(getApplicationContext(), isChecked);
+                PrefUtils.setAwakeDebugEnabled(buttonView.getContext(), isChecked);
                 if (!isChecked) {
                     buttonView.setText("Off");
-                    PowerConnectionReceiver.disableStayAwake(getApplicationContext());
                 } else {
                     buttonView.setText("On");
-                    PowerConnectionReceiver.toggleStayAwake(getApplicationContext());
                 }
+
+                PowerConnectionReceiver.toggleAwake(buttonView.getContext(), isChecked);
+                ShortcutUtils.updateShortcuts(buttonView.getContext());
             }
         });
+
+        acSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PrefUtils.setAwakeAc(buttonView.getContext(), isChecked);
+                PowerConnectionReceiver.toggleAwake(buttonView.getContext(), mActionBarSwitch.isChecked());
+                ShortcutUtils.updateShortcuts(buttonView.getContext());
+            }
+        });
+
+        ShortcutUtils.updateShortcuts(this);
     }
 
     @Override

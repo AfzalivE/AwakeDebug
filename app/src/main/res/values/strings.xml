@@ -5,5 +5,15 @@
     <string name="intro_1">This app allows you to keep your screen on only when the device is connected to USB and Debugging is enabled.</string>
     <string name="intro_2">It switches to the previously set display timeout when the device is unplugged or if it\'s plugged to the wall.</string>
     <string name="action_settings">Settings</string>
+    <string name="on_ac_desc">On when connected to AC</string>
+
+    <!-- Shortcut strings -->
+    <string name="awake_disabled">Awake Disabled</string>
+    <string name="awake_debug_toggle_long">Toggle Debug Awake Mode</string>
+    <string name="awake_debug_toggle_short">Debug Awake</string>
+
+    <string name="awake_ac_disabled">Awake AC Disabled</string>
+    <string name="awake_ac_toggle_long">Toggle AC Stay Awake Mode</string>
+    <string name="awake_ac_toggle_short">AC Awake</string>
 
 </resources>

@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 
@@ -20,10 +19,10 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        boolean isEnabled = getPrefEnabled(context.getApplicationContext());
-        Timber.d("getPrefEnabled: " + isEnabled);
+        boolean isAwakeDebugEnabled = PrefUtils.isAwakeDebugEnabled(context.getApplicationContext());
+        boolean isAwakeAcEnabled = PrefUtils.isAwakeAcEnabled(context.getApplicationContext());
 
-        if (isEnabled) {
+        if (isAwakeDebugEnabled || isAwakeAcEnabled) {
             toggleStayAwake(context);
         }
     }
@@ -33,7 +32,8 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         Intent batteryStatus = context.getApplicationContext().registerReceiver(null, filter);
 
         int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
+        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB && PrefUtils.isAwakeDebugEnabled(context);
+        boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC && PrefUtils.isAwakeAcEnabled(context);
 
         int adb;
         if (VERSION.SDK_INT < VERSION_CODES.JELLY_BEAN_MR1) {
@@ -42,7 +42,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
             adb = Settings.Global.getInt(context.getContentResolver(), Settings.Global.ADB_ENABLED, 0);
         }
 
-        if (usbCharge && adb == 1) {
+        if ((usbCharge && adb == 1) || acCharge) {
             enableStayAwake(context);
         } else {
             disableStayAwake(context);
@@ -52,7 +52,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
     public static void disableStayAwake(Context context) {
         int timeout = getScreenOffTimeout(context);
         if (timeout == Integer.MAX_VALUE) {
-            int savedTimeout = getSavedTimeout(context);
+            int savedTimeout = PrefUtils.getSavedTimeout(context);
             changeScreenOffTimeout(context, savedTimeout);
         }
     }
@@ -70,12 +70,12 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
 
     private static void changeScreenOffTimeout(Context context, int newTimeout, int oldTimeout) {
         setScreenOffTimeout(context, newTimeout);
-        setPrefSavedTimeout(context, oldTimeout);
+        PrefUtils.setSavedTimeout(context, oldTimeout);
     }
 
     private static void setScreenOffTimeout(Context context, int timeout) {
         if (hasPermission(context)) {
-            Settings.System.putInt(context.getContentResolver(), "screen_off_timeout", timeout);
+            Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, timeout);
         }
     }
 
@@ -90,28 +90,18 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
         return 0;
     }
 
-    private static int getSavedTimeout(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt("AwakeDebug", 60000);
-    }
-
-    private static void setPrefSavedTimeout(Context context, int timeout) {
-        Timber.d("savedTimeout = " + timeout);
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt("AwakeDebug", timeout).commit();
-    }
-
-    public static boolean getPrefEnabled(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("AwakeDebugEnabled", false);
-    }
-
-    public static void setPrefEnabled(Context context, boolean isEnabled) {
-        Timber.d("setPrefEnabled: " + isEnabled);
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("AwakeDebugEnabled", isEnabled).commit();
-    }
-
     public static boolean hasPermission(Context context) {
         if (VERSION.SDK_INT >= VERSION_CODES.M && !Settings.System.canWrite(context)) {
             return false;
         }
         return true;
+    }
+
+    static void toggleAwake(Context context, boolean isChecked) {
+        if (isChecked) {
+            PowerConnectionReceiver.toggleStayAwake(context);
+        } else {
+            PowerConnectionReceiver.disableStayAwake(context);
+        }
     }
 }
