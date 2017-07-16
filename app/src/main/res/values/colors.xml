@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="action_bar">#263238</color>
-    <color name="switch_bar">#37474f</color>
+    <color name="action_bar">#2D2D2D</color>
+    <color name="switch_bar">#3A3A3A</color>
     <color name="status_bar">#21272c</color>
+    <color name="switch_checked">#5C94F1</color>
+    <color name="switch_unchecked">#B9B9B9</color>
 </resources>

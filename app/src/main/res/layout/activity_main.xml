@@ -1,81 +1,73 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="com.afzaln.awakedebug.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.afzaln.awakedebug.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:title="@string/app_name"
-            android:background="@color/action_bar"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            android:theme="@style/DarkToolbar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="@string/app_name" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/toggle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/switch_bar">
+        android:layout_height="@dimen/switch_height"
+        android:background="@color/switch_bar"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text="On"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:theme="@style/SwitchTheme"
+        tools:checked="true" />
 
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/toggle"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/switch_height"
-            android:textSize="18sp"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:textColor="@android:color/white"
-            android:text="On" />
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/toggle_ac"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/switch_height"
-            android:textSize="18sp"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:textColor="@android:color/white"
-            android:text="@string/on_ac_desc" />
-
-    </LinearLayout>
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/toggle_ac"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/switch_height"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text="@string/on_ac_desc"
+        android:textSize="18sp"
+        android:theme="@style/SwitchTheme" />
 
     <TextView
         android:id="@+id/intro_1"
-        android:text="@string/intro_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:lineSpacingMultiplier="1.25"
-        android:textStyle="italic"
         android:fontFamily="sans-serif-condensed"
+        android:lineSpacingMultiplier="1.25"
+        android:paddingBottom="12dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="12dp" />
+        android:text="@string/intro_1"
+        android:textSize="20sp"
+        android:textStyle="italic" />
 
     <TextView
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:text="@string/intro_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:fontFamily="sans-serif-condensed"
         android:lineSpacingMultiplier="1.25"
-        android:textStyle="italic"
-        android:fontFamily="sans-serif-condensed" />
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:text="@string/intro_2"
+        android:textSize="20sp"
+        android:textStyle="italic" />
 
 </LinearLayout>
