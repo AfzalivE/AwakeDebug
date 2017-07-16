@@ -20,6 +20,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".AppShortcutActivity"
+            android:theme="@android:style/Theme.NoDisplay" />
+
         <receiver android:name=".PowerConnectionReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />

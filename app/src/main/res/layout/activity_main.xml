@@ -25,20 +25,30 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="@color/switch_bar">
 
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/toggle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/switch_height"
             android:textSize="18sp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:textColor="@android:color/white"
             android:text="On" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/toggle_ac"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/switch_height"
+            android:textSize="18sp"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:textColor="@android:color/white"
+            android:text="@string/on_ac_desc" />
 
     </LinearLayout>
 
