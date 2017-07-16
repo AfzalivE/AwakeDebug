@@ -6,14 +6,13 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '25.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 4
         versionName "1.3"
     }
