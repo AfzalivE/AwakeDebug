@@ -17,6 +17,7 @@ import timber.log.Timber;
  * Receives the power connected/disconnected intents from the system
  */
 public class PowerConnectionReceiver extends BroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
         boolean isEnabled = getPrefEnabled(context.getApplicationContext());
