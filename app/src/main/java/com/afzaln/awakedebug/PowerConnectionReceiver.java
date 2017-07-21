@@ -42,7 +42,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
             adb = Settings.Global.getInt(context.getContentResolver(), Settings.Global.ADB_ENABLED, 0);
         }
 
-        if ((usbCharge && adb == 1) || acCharge) {
+        if ((usbCharge || acCharge) && adb == 1) {
             enableStayAwake(context);
         } else {
             disableStayAwake(context);
