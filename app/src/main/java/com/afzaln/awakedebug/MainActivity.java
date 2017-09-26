@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        mActionBarSwitch = (SwitchCompat) findViewById(R.id.toggle);
-        SwitchCompat acSwitch = (SwitchCompat) findViewById(R.id.toggle_ac);
+        mActionBarSwitch = findViewById(R.id.toggle);
+        SwitchCompat acSwitch = findViewById(R.id.toggle_ac);
 
         final boolean state = PrefUtils.isAwakeDebugEnabled(this);
         mActionBarSwitch.setChecked(state);

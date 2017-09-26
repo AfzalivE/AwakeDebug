@@ -17,19 +17,27 @@ import timber.log.Timber;
  */
 public class PowerConnectionReceiver extends BroadcastReceiver {
 
+    private final static int MAX_TIMEOUT = 30 * 60 * 1000;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+        check(context);
+    }
+
+    public static boolean check(Context context) {
         boolean isAwakeDebugEnabled = PrefUtils.isAwakeDebugEnabled(context.getApplicationContext());
         boolean isAwakeAcEnabled = PrefUtils.isAwakeAcEnabled(context.getApplicationContext());
 
         if (isAwakeDebugEnabled || isAwakeAcEnabled) {
-            toggleStayAwake(context);
+            return toggleStayAwake(context);
         }
+
+        return false;
     }
 
-    public static void toggleStayAwake(Context context) {
-        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = context.getApplicationContext().registerReceiver(null, filter);
+    public static boolean toggleStayAwake(Context context) {
+        IntentFilter batteryFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = context.getApplicationContext().registerReceiver(null, batteryFilter);
 
         int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB && PrefUtils.isAwakeDebugEnabled(context);
@@ -44,14 +52,16 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
 
         if ((usbCharge || acCharge) && adb == 1) {
             enableStayAwake(context);
+            return true;
         } else {
             disableStayAwake(context);
+            return false;
         }
     }
 
     public static void disableStayAwake(Context context) {
         int timeout = getScreenOffTimeout(context);
-        if (timeout == Integer.MAX_VALUE) {
+        if (timeout == MAX_TIMEOUT) {
             int savedTimeout = PrefUtils.getSavedTimeout(context);
             changeScreenOffTimeout(context, savedTimeout);
         }
@@ -59,8 +69,8 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
 
     public static void enableStayAwake(Context context) {
         int timeout = getScreenOffTimeout(context);
-        if (timeout != Integer.MAX_VALUE) {
-            changeScreenOffTimeout(context, Integer.MAX_VALUE, timeout);
+        if (timeout != MAX_TIMEOUT) {
+            changeScreenOffTimeout(context, MAX_TIMEOUT, timeout);
         }
     }
 
@@ -102,6 +112,7 @@ public class PowerConnectionReceiver extends BroadcastReceiver {
             PowerConnectionReceiver.toggleStayAwake(context);
         } else {
             PowerConnectionReceiver.disableStayAwake(context);
+//            context.unregisterReceiver(new PowerConnectionReceiver());
         }
     }
 }
