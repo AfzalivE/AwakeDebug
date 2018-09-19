@@ -8,7 +8,7 @@ repositories {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         minSdkVersion 14
@@ -42,12 +42,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true
-    }
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
 
-    compile 'com.jakewharton.timber:timber:4.5.1'
+    implementation 'com.jakewharton.timber:timber:4.5.1'
 }
