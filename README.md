@@ -1,3 +1,5 @@
+## This app is not being updated due to [issue #3](https://github.com/AfzalivE/AwakeDebug/issues/3)
+
 AwakeDebug
 ==========
 <a href="https://play.google.com/store/apps/details?id=com.afzaln.awakedebug">
