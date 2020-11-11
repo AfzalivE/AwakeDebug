@@ -6,11 +6,11 @@
     android:orientation="vertical"
     tools:context="com.afzaln.awakedebug.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
@@ -18,9 +18,9 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:title="@string/app_name" />
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/toggle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/switch_height"
@@ -33,7 +33,7 @@
         android:theme="@style/SwitchTheme"
         tools:checked="true" />
 
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/toggle_ac"
         android:layout_width="match_parent"
         android:layout_height="@dimen/switch_height"

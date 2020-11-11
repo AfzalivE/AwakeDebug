@@ -1,20 +1,23 @@
-apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+plugins {
+    id 'com.android.application'
+    id "com.github.plnice.canidropjetifier" version "0.5"
+}
+//apply plugin: 'io.fabric'
 
 repositories {
     jcenter()
-    maven { url 'https://maven.fabric.io/public' }
+//    maven { url 'https://maven.fabric.io/public' }
 }
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '28.0.2'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
-        versionCode 8
-        versionName "1.5.3"
+        targetSdkVersion 30
+        versionCode 9
+        versionName "1.6"
     }
 
     signingConfigs {
@@ -43,8 +46,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:design:26.1.0'
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
 
-    implementation 'com.jakewharton.timber:timber:4.5.1'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }
