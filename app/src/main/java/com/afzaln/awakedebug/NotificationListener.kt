@@ -1,5 +1,6 @@
 package com.afzaln.awakedebug
 
+import android.content.res.Resources
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import timber.log.Timber
@@ -52,8 +53,16 @@ class NotificationListener : NotificationListenerService() {
     private fun isDebuggingNotification(sbn: StatusBarNotification): Boolean {
         val notification = sbn.notification
         val title = notification.extras["android.title"]
+
+        val adbActiveNotificationTitle = getSystemString("adb_active_notification_title")
+        val wifiAdbActiveNotificationTitle = getSystemString("adbwifi_active_notification_title")
+
         return notification.channelId == "DEVELOPER_IMPORTANT" && title in listOf(
-            "USB debugging connected", "Wireless debugging connected"
+            adbActiveNotificationTitle, wifiAdbActiveNotificationTitle
         )
+    }
+
+    private fun getSystemString(string: String): String {
+        return Resources.getSystem().getString(Resources.getSystem().getIdentifier(string, "string", "android"))
     }
 }

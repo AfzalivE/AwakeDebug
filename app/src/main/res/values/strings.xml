@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Awake for Debug</string>
-    <string name="intro_1">This app allows you to keep your screen awake only when the Wireless or USB debugging is active.</string>
+    <string name="intro_1">This app allows you to keep your screen awake only when Wireless or USB debugging is active.</string>
     <string name="intro_2">It switches to the previously set display timeout when debugging is not active.</string>
     <string name="action_settings">Settings</string>
     <string name="on_ac_desc">On when connected to AC</string>
