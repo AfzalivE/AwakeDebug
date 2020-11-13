@@ -31,7 +31,7 @@ jobs:
 
       - name: Build keystore file
         run: |
-          echo $KEYSTORE | $base64 -di > awakedebug.keystore
+          echo $KEYSTORE | base64 -di > awakedebug.keystore
         env:
           KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
         
