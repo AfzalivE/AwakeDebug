@@ -32,6 +32,12 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build with Gradle
         run: ./gradlew build
+      
+      - name: Build keystore file
+        run: |
+          echo $KEYSTORE | $base64 -di > awakedebug.keystore
+        env:
+          KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
         
       - name: Build Release APK
         run: ./gradlew assembleRelease
