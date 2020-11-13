@@ -40,3 +40,9 @@ jobs:
         env:
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          
+      - name: Archive APK
+        uses: actions/upload-artifact@v1
+        with:
+            name: app
+            path: app/build/outputs/apk/release/app-release.apk
