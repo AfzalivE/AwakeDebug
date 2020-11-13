@@ -29,10 +29,6 @@ jobs:
         with:
           java-version: 1.8
 
-      # Runs a set of commands using the runners shell
-      - name: Build with Gradle
-        run: ./gradlew build
-      
       - name: Build keystore file
         run: |
           echo $KEYSTORE | $base64 -di > awakedebug.keystore
@@ -41,3 +37,6 @@ jobs:
         
       - name: Build Release APK
         run: ./gradlew assembleRelease
+        env:
+          RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
