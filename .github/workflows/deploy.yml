@@ -55,6 +55,6 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.afzaln.awakedebug
-          releaseFile: app/build/outputs/apk/release/app-release.apk
+          releaseFiles: app/build/outputs/apk/release/app-release.apk
           track: beta
           whatsNewDirectory: whatsnew/

@@ -26,15 +26,15 @@ android {
     signingConfigs {
         release {
             Properties keyProps = new Properties()
-            File keyProperties = file('../keystore.properties')
+            File keyProperties = file('../keystore.roperties')
             if (keyProperties.exists()) {
                 // when building locally, use signing properties from keystore.properties
                 keyProps.load(new FileInputStream(keyProperties))
             } else {
                 // when building CI server, use signing properties from environment variables
-                keyProps.setProperty('storePass', System.getenv('RELEASE_KEYSTORE_PASSWORD'))
-                keyProps.setProperty('pass', System.getenv('RELEASE_KEYSTORE_PASSWORD'))
-                keyProps.setProperty('alias', System.getenv('RELEASE_KEY_ALIAS'))
+                keyProps.setProperty('storePass', System.getenv('RELEASE_KEYSTORE_PASSWORD') ?: "")
+                keyProps.setProperty('pass', System.getenv('RELEASE_KEYSTORE_PASSWORD') ?: "")
+                keyProps.setProperty('alias', System.getenv('RELEASE_KEY_ALIAS') ?: "")
                 keyProps.setProperty('store', '../awakedebug.keystore')
             }
 
@@ -51,6 +51,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
         }
+    }
+
+    packagingOptions {
+        exclude "DebugProbesKt.bin"
     }
 
     compileOptions {
