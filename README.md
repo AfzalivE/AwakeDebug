@@ -1,5 +1,3 @@
-## This app is not being updated due to [issue #3](https://github.com/AfzalivE/AwakeDebug/issues/3)
-
 AwakeDebug
 ==========
 <a href="https://play.google.com/store/apps/details?id=com.afzaln.awakedebug">
@@ -12,7 +10,7 @@ AwakeDebug
 </p>
 
 
-This app allows you to keep your screen on when the device is connected to USB and Debugging (ADB) is enabled.
+This app allows you to keep your screen awake while Wifi or USB debugging is active.
 
 It switches to the previously set display timeout when the device is unplugged.
 
@@ -35,9 +33,3 @@ This application is open-source under the Apache license.
 2. User grants permission, Switch is enabled. If user is already plugged into USB and debugging, screen off timeout is modified immediately. If not, after user plugs in USB and starts debugging, screen timeout is modified.
 3. User plugs out or disables/stops debugging, screen timeout goes back to what it was.
 4. User disables option, screen timeout goes back to what it was.
-
-### For AC Power
-
-1. Enable "On when connected to AC". If user is already plugged into AC, screen off timeout is modified immediately. If not, after user plugs in AC, screen timeout is modified.
-2. User plugs out, screen timeout goes back to what it was.
-3. User disables option, screen timeout goes back to what it was.
