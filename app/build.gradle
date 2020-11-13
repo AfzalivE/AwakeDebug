@@ -28,13 +28,20 @@ android {
             Properties keyProps = new Properties()
             File keyProperties = file('../keystore.properties')
             if (keyProperties.exists()) {
+                // when building locally, use signing properties from keystore.properties
                 keyProps.load(new FileInputStream(keyProperties))
-
-                storeFile file(keyProps['store'])
-                keyAlias keyProps['alias']
-                storePassword keyProps['storePass']
-                keyPassword keyProps['pass']
+            } else {
+                // when building CI server, use signing properties from environment variables
+                keyProps.setProperty('storePass', System.getenv('RELEASE_KEYSTORE_PASSWORD'))
+                keyProps.setProperty('pass', System.getenv('RELEASE_KEYSTORE_PASSWORD'))
+                keyProps.setProperty('alias', System.getenv('RELEASE_KEY_ALIAS'))
+                keyProps.setProperty('store', 'awakedebug.keystore')
             }
+
+            storeFile file(keyProps['store'])
+            keyAlias keyProps['alias']
+            storePassword keyProps['storePass']
+            keyPassword keyProps['pass']
         }
     }
 
