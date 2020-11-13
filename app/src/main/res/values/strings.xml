@@ -36,5 +36,8 @@
     <string name="notification_access_granted">Notification access granted</string>
     <string name="modify_settings_granted">Modify system settings permission granted</string>
     <string name="next">Continue</string>
+    <string name="type_of_debugging">Type of debugging</string>
+    <string name="usb">USB</string>
+    <string name="wireless">Wireless</string>
 
 </resources>

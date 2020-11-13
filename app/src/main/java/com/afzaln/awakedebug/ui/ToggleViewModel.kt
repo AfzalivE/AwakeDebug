@@ -25,7 +25,7 @@ class ToggleViewModel(
         get() = _settingsLiveData
 
     init {
-        val settingsUiState = SettingsUiState(prefs.awakeDebug)
+        val settingsUiState = SettingsUiState(prefs.awakeDebug, prefs.usbDebugging, prefs.wifiDebugging)
         _settingsLiveData.value = settingsUiState
     }
 
@@ -37,15 +37,29 @@ class ToggleViewModel(
         if (!shouldEnable) {
             systemSettings.restoreScreenTimeout()
         } else {
-            if (DebugNotification.isActive) {
+            if ((DebugNotification.activeDebugNotifications intersect prefs.enabledDebuggingTypes).isNotEmpty()) {
                 systemSettings.extendScreenTimeout()
+            } else {
+                systemSettings.restoreScreenTimeout()
             }
         }
         prefs.awakeDebug = shouldEnable
         shortcuts.updateShortcuts()
     }
 
+    fun toggleUsbDebugging(shouldEnable: Boolean) {
+        prefs.usbDebugging = shouldEnable
+        setDebugAwake(prefs.awakeDebug)
+    }
+
+    fun toggleWifiDebugging(shouldEnable: Boolean) {
+        prefs.wifiDebugging = shouldEnable
+        setDebugAwake(prefs.awakeDebug)
+    }
+
     data class SettingsUiState(
         val debugAwake: Boolean = false,
+        val usbDebugging: Boolean = true,
+        val wifiDebugging: Boolean = true
     )
 }

@@ -1,17 +1,19 @@
 package com.afzaln.awakedebug
 
+import android.app.Notification
 import android.content.res.Resources
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import com.afzaln.awakedebug.data.DebuggingType
 import timber.log.Timber
 
 /**
- * Singleton to track is debug notification is active.
+ * Singleton to track which debug notifications are active.
  * Didn't really see the benefit of using a non-singleton
  * for this.
  */
 object DebugNotification {
-    var isActive: Boolean = false
+    var activeDebugNotifications: List<DebuggingType> = listOf()
 }
 
 /**
@@ -27,14 +29,24 @@ class NotificationListener : NotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        DebugNotification.isActive = activeNotifications.any {
-            isDebuggingNotification(it)
+        updateActiveDebuggingNotifications()
+    }
+
+    private fun updateActiveDebuggingNotifications() {
+        try {
+            DebugNotification.activeDebugNotifications = activeNotifications.filter {
+                it.isDebugNotification()
+            }.map {
+                return@map it.notification.getDebugNotificationType()
+            }
+        } catch (ex: SecurityException) {
+            Timber.e(ex)
         }
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
-        if (isDebuggingNotification(sbn)) {
-            DebugNotification.isActive = true
+        updateActiveDebuggingNotifications()
+        if (sbn.isDebugNotification(prefUtils.enabledDebuggingTypes)) {
             if (prefUtils.awakeDebug) {
                 Timber.d("Debugging enabled: $sbn")
                 systemSettings.extendScreenTimeout()
@@ -43,23 +55,28 @@ class NotificationListener : NotificationListenerService() {
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
-        if (isDebuggingNotification(sbn)) {
-            DebugNotification.isActive = false
+        updateActiveDebuggingNotifications()
+        if (sbn.isDebugNotification(prefUtils.enabledDebuggingTypes)) {
             Timber.d("Debugging disabled: $sbn")
             systemSettings.restoreScreenTimeout()
         }
     }
 
-    private fun isDebuggingNotification(sbn: StatusBarNotification): Boolean {
-        val notification = sbn.notification
-        val title = notification.extras["android.title"]
+    private fun StatusBarNotification.isDebugNotification(
+        ofTypes: List<DebuggingType> = listOf(DebuggingType.USB, DebuggingType.WIFI)
+    ): Boolean {
+        return notification.channelId == "DEVELOPER_IMPORTANT" && notification.getDebugNotificationType() in ofTypes
+    }
 
+    private fun Notification.getDebugNotificationType(): DebuggingType {
         val adbActiveNotificationTitle = getSystemString("adb_active_notification_title")
         val wifiAdbActiveNotificationTitle = getSystemString("adbwifi_active_notification_title")
 
-        return notification.channelId == "DEVELOPER_IMPORTANT" && title in listOf(
-            adbActiveNotificationTitle, wifiAdbActiveNotificationTitle
-        )
+        return when (extras["android.title"]) {
+            adbActiveNotificationTitle -> DebuggingType.USB
+            wifiAdbActiveNotificationTitle -> DebuggingType.WIFI
+            else                           -> DebuggingType.NONE
+        }
     }
 
     private fun getSystemString(string: String): String {
