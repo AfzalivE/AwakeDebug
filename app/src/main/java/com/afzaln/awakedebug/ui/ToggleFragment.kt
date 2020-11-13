@@ -16,6 +16,11 @@ import com.afzaln.awakedebug.databinding.ToggleFragmentBinding
 import com.google.android.material.button.MaterialButtonToggleGroup
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.Period
+import kotlin.time.ExperimentalTime
+import kotlin.time.milliseconds
+import kotlin.time.minutes
+import kotlin.time.seconds
 
 /**
  * View responsible for allowing the user
@@ -46,7 +51,7 @@ class ToggleFragment : Fragment() {
 
     private val groupChangeListener: (group: MaterialButtonToggleGroup, checkedId: Int, isChecked: Boolean) -> Unit = { _, checkedId, isChecked ->
         when (checkedId) {
-            R.id.usb_debugging  -> viewModel.toggleUsbDebugging(isChecked)
+            R.id.usb_debugging -> viewModel.toggleUsbDebugging(isChecked)
             R.id.wifi_debugging -> viewModel.toggleWifiDebugging(isChecked)
         }
     }
@@ -55,6 +60,7 @@ class ToggleFragment : Fragment() {
         viewModel.setDebugAwake(binding.toggleDebug.isChecked)
     }
 
+    @ExperimentalTime
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -74,7 +80,7 @@ class ToggleFragment : Fragment() {
                 binding.toggleDebug.isChecked = it.debugAwake
                 binding.usbDebugging.isChecked = it.usbDebugging
                 binding.wifiDebugging.isChecked = it.wifiDebugging
-                binding.displayTimeout.text = it.screenTimeout.toString()
+                binding.displayTimeout.text = it.screenTimeout.milliseconds.inMinutes.minutes.toString()
                 Timber.d("Screen timeout UI: ${it.screenTimeout}")
                 binding.debuggingStatus.text = getDebuggingStatusString(it.debuggingStatus)
             }
@@ -83,16 +89,14 @@ class ToggleFragment : Fragment() {
 
     private fun getDebuggingStatusString(debuggingStatus: List<DebuggingType>): CharSequence {
         return when {
-            debuggingStatus.isEmpty()                                        -> getString(DebuggingType.NONE.stringRes())
-            debuggingStatus.size == 1                                        -> getString(debuggingStatus.first().stringRes())
-            debuggingStatus == listOf(DebuggingType.USB, DebuggingType.WIFI) -> {
-                getString(
-                    R.string.first_and_second,
-                    getString(DebuggingType.USB.stringRes()),
-                    getString(DebuggingType.WIFI.stringRes())
-                )
-            }
-            else                                                             -> getString(R.string.not_active)
+            debuggingStatus.isEmpty()                     -> getString(DebuggingType.NONE.stringRes())
+            debuggingStatus.size == 1                     -> getString(debuggingStatus.first().stringRes())
+            debuggingStatus == DebuggingType.usbWifiTypes -> getString(
+                R.string.first_and_second,
+                getString(DebuggingType.USB.stringRes()),
+                getString(DebuggingType.WIFI.stringRes())
+            )
+            else                                          -> getString(R.string.not_active)
         }
     }
 

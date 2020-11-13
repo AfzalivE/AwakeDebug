@@ -42,4 +42,8 @@ class ToggleController(
 
 enum class DebuggingType {
     USB, WIFI, NONE;
+
+    companion object {
+        val usbWifiTypes: List<DebuggingType> = listOf(USB, WIFI)
+    }
 }

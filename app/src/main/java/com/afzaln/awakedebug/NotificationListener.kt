@@ -36,7 +36,7 @@ class NotificationListener : NotificationListenerService() {
 }
 
 private fun StatusBarNotification.isDebugNotification(
-    ofTypes: List<DebuggingType> = listOf(DebuggingType.USB, DebuggingType.WIFI)
+    ofTypes: List<DebuggingType> = DebuggingType.usbWifiTypes
 ): Boolean {
     return notification.channelId == "DEVELOPER_IMPORTANT" && notification.getDebugNotificationType() in ofTypes
 }
