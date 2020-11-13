@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: On Push CI
+name: Deploy CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -8,7 +8,7 @@ on:
   push:
     branches: 
       - '*'
-      - master
+      - main
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -31,9 +31,7 @@ jobs:
 
       - name: Build keystore file
         run: |
-          echo $KEYSTORE | base64 -di > awakedebug.keystore
-        env:
-          KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+          echo '${{ secrets.RELEASE_KEYSTORE }}' | base64 -di > awakedebug.keystore
         
       - name: Build Release APK
         run: ./gradlew assembleRelease
@@ -42,7 +40,21 @@ jobs:
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           
       - name: Archive APK
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
             name: app
             path: app/build/outputs/apk/release/app-release.apk
+            
+      - name: Build service_account.json
+        id: createServiceAccount
+        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
+            
+      - name: Deploy to Play Store Beta
+        id: deploy
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.afzaln.awakedebug
+          releaseFile: app/build/outputs/apk/release/app-release.apk
+          track: beta
+          whatsNewDirectory: whatsnew/
