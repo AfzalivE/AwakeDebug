@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
     </style>
 
     <style name="PrimaryToolbar" parent="ThemeOverlay.MaterialComponents.ActionBar">
@@ -13,7 +14,12 @@
         <item name="android:textColorPrimary">@color/primaryTextColor</item>
     </style>
 
-    <style name="SwitchTheme" parent="Base.Widget.AppCompat.CompoundButton.Switch">
-
+    <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Card</item>
     </style>
+
+    <style name="ThemeOverlay.App.Card" parent="">
+        <item name="colorPrimary">@color/primaryColor</item>
+    </style>
+
 </resources>

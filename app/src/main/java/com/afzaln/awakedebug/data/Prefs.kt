@@ -2,17 +2,14 @@ package com.afzaln.awakedebug.data
 
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
-import com.afzaln.awakedebug.MyApplication
+import com.afzaln.awakedebug.DebuggingType
+import com.afzaln.awakedebug.AwakeDebugApp
 import timber.log.Timber
 
 private const val KEY_USB_DEBUG_ENABLED = "UsbDebugEnabled"
 private const val KEY_WIFI_DEBUG_ENABLED = "WifiDebugEnabled"
 private const val KEY_AWAKE_DEBUG_ENABLED = "AwakeDebugEnabled"
 private const val KEY_DISPLAY_TIMEOUT = "DisplayTimeout"
-
-enum class DebuggingType {
-    USB, WIFI, NONE
-}
 
 /**
  * Responsible for keeping user choices for
@@ -21,7 +18,7 @@ enum class DebuggingType {
  *
  * Created by Dmytro Karataiev on 3/29/17.
  */
-class Prefs(val app: MyApplication) {
+class Prefs(val app: AwakeDebugApp) {
     private val preferences: SharedPreferences
         get() = PreferenceManager.getDefaultSharedPreferences(app)
 

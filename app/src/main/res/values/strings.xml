@@ -37,7 +37,12 @@
     <string name="modify_settings_granted">Modify system settings permission granted</string>
     <string name="next">Continue</string>
     <string name="type_of_debugging">Type of debugging</string>
+    <string name="first_and_second">%1$s &amp; %2$s</string>
     <string name="usb">USB</string>
     <string name="wireless">Wireless</string>
+    <string name="debugging_status">Debugging status</string>
+    <string name="not_active">Not active</string>
+    <string name="display_timeout">Display timeout</string>
+    <string name="unknown">Unknown</string>
 
 </resources>

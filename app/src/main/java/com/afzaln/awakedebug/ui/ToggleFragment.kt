@@ -5,13 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.afzaln.awakedebug.DebuggingType
 import com.afzaln.awakedebug.Injector
 import com.afzaln.awakedebug.R
 import com.afzaln.awakedebug.databinding.ToggleFragmentBinding
+import com.google.android.material.button.MaterialButtonToggleGroup
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * View responsible for allowing the user
@@ -40,32 +44,64 @@ class ToggleFragment : Fragment() {
         }
     }
 
+    private val groupChangeListener: (group: MaterialButtonToggleGroup, checkedId: Int, isChecked: Boolean) -> Unit = { _, checkedId, isChecked ->
+        when (checkedId) {
+            R.id.usb_debugging  -> viewModel.toggleUsbDebugging(isChecked)
+            R.id.wifi_debugging -> viewModel.toggleWifiDebugging(isChecked)
+        }
+    }
+
+    private val toggleClickListener: (v: View) -> Unit = {
+        viewModel.setDebugAwake(binding.toggleDebug.isChecked)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            binding.debuggingTypeLayout.visibility = View.VISIBLE
-            binding.debuggingTypeGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
-                when (checkedId) {
-                    R.id.usb_debugging -> viewModel.toggleUsbDebugging(isChecked)
-                    R.id.wifi_debugging -> viewModel.toggleWifiDebugging(isChecked)
-                }
-            }
-
+            binding.debuggingTypeGroup.visibility = View.VISIBLE
+            binding.debuggingTypeLabel.visibility = View.VISIBLE
         } else {
-            binding.debuggingTypeLayout.visibility = View.GONE
+            binding.debuggingTypeGroup.visibility = View.GONE
+            binding.debuggingTypeLabel.visibility = View.GONE
         }
 
-        binding.toggleDebug.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setDebugAwake(isChecked)
-        }
+        binding.toggleDebug.setOnClickListener(toggleClickListener)
+        binding.debuggingTypeGroup.addOnButtonCheckedListener(groupChangeListener)
 
-        viewModel.settingsLiveData.observe(viewLifecycleOwner) {
+        viewModel.uiStateLiveData.observe(viewLifecycleOwner) {
             lifecycleScope.launch {
                 binding.toggleDebug.isChecked = it.debugAwake
                 binding.usbDebugging.isChecked = it.usbDebugging
                 binding.wifiDebugging.isChecked = it.wifiDebugging
+                binding.displayTimeout.text = it.screenTimeout.toString()
+                Timber.d("Screen timeout UI: ${it.screenTimeout}")
+                binding.debuggingStatus.text = getDebuggingStatusString(it.debuggingStatus)
             }
+        }
+    }
+
+    private fun getDebuggingStatusString(debuggingStatus: List<DebuggingType>): CharSequence {
+        return when {
+            debuggingStatus.isEmpty()                                        -> getString(DebuggingType.NONE.stringRes())
+            debuggingStatus.size == 1                                        -> getString(debuggingStatus.first().stringRes())
+            debuggingStatus == listOf(DebuggingType.USB, DebuggingType.WIFI) -> {
+                getString(
+                    R.string.first_and_second,
+                    getString(DebuggingType.USB.stringRes()),
+                    getString(DebuggingType.WIFI.stringRes())
+                )
+            }
+            else                                                             -> getString(R.string.not_active)
+        }
+    }
+
+    @StringRes
+    fun DebuggingType.stringRes(): Int {
+        return when (this) {
+            DebuggingType.USB -> R.string.usb
+            DebuggingType.WIFI -> R.string.wireless
+            DebuggingType.NONE -> R.string.not_active
         }
     }
 }

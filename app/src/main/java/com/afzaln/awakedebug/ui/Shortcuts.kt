@@ -1,21 +1,24 @@
-package com.afzaln.awakedebug.data
+package com.afzaln.awakedebug.ui
 
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
-import com.afzaln.awakedebug.Injector.prefs
-import com.afzaln.awakedebug.MyApplication
+import com.afzaln.awakedebug.Injector
+import com.afzaln.awakedebug.AwakeDebugApp
 import com.afzaln.awakedebug.R
-import com.afzaln.awakedebug.ui.AppShortcutActivity
+import com.afzaln.awakedebug.data.Prefs
 
 /**
  * Responsible for updating launcher shortcuts.
  *
  * Original version contributed by @dmytroKarataiev
  */
-class Shortcuts(val app: MyApplication) {
+class Shortcuts(
+    val app: AwakeDebugApp,
+    private val prefs: Prefs = Injector.prefs
+) {
 
     fun updateShortcuts() {
         // create and set dynamic shortcuts
@@ -49,7 +52,7 @@ class Shortcuts(val app: MyApplication) {
         val intent = Intent(context, AppShortcutActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         intent.action = Intent.ACTION_RUN
-        intent.putExtra(extraName, enabled)
+        intent.putExtra(extraName, !enabled)
         val acIcon = Icon.createWithResource(context, if (enabled) R.drawable.ic_check_box else R.drawable.ic_check_box_blank)
         return ShortcutInfo.Builder(context.applicationContext, shortcutId)
             .setShortLabel(shortLabel)
