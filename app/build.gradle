@@ -35,7 +35,7 @@ android {
                 keyProps.setProperty('storePass', System.getenv('RELEASE_KEYSTORE_PASSWORD'))
                 keyProps.setProperty('pass', System.getenv('RELEASE_KEYSTORE_PASSWORD'))
                 keyProps.setProperty('alias', System.getenv('RELEASE_KEY_ALIAS'))
-                keyProps.setProperty('store', 'awakedebug.keystore')
+                keyProps.setProperty('store', '../awakedebug.keystore')
             }
 
             storeFile file(keyProps['store'])
