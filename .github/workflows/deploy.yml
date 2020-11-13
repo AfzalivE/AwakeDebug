@@ -45,15 +45,11 @@ jobs:
             name: app
             path: app/build/outputs/apk/release/app-release.apk
             
-      - name: Build service_account.json
-        id: createServiceAccount
-        run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
-            
       - name: Deploy to Play Store Beta
         id: deploy
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.
         with:
-          serviceAccountJson: service_account.json
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.afzaln.awakedebug
           releaseFiles: app/build/outputs/apk/release/app-release.apk
           track: beta
