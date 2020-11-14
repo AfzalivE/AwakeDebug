@@ -1,4 +1,4 @@
-Awake for Debug [![Deploy CI](https://github.com/AfzalivE/AwakeDebug/workflows/Deploy%20CI/badge.svg?branch=main)](https://github.com/AfzalivE/AwakeDebug/actions?query=workflow%3A%22Deploy+CI%22)
+Awake for Debug [![Deploy CI](https://github.com/AfzalivE/AwakeDebug/workflows/Deploy%20CI/badge.svg?branch=main)](https://github.com/AfzalivE/AwakeDebug/actions?query=workflow%3A%22Deploy+CI%22) [![Develop builds](https://github.com/AfzalivE/AwakeDebug/workflows/Develop%20builds/badge.svg?branch=develop)](https://github.com/AfzalivE/AwakeDebug/actions?query=workflow%3A%22Develop+builds%22)
 ==========
 <a href="https://play.google.com/store/apps/details?id=com.afzaln.awakedebug">
   <img alt="Get it on Google Play" width="20%"
