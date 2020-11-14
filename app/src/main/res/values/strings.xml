@@ -1,48 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Awake for Debug</string>
-    <string name="intro_1">This app allows you to keep your screen awake only when Wireless or USB debugging is active.</string>
-    <string name="intro_2">It switches to the previously set display timeout when debugging is not active.</string>
-    <string name="action_settings">Settings</string>
-    <string name="on_ac_desc">On when connected to AC</string>
+    <string name="notification_service">ADB Notification Listener</string>
 
     <!-- Shortcut strings -->
     <string name="awake_disabled">Awake Disabled</string>
     <string name="awake_debug_toggle_long">Toggle Debug Awake Mode</string>
     <string name="awake_debug_toggle_short">Debug Awake</string>
 
-    <string name="awake_ac_disabled">Awake AC Disabled</string>
-    <string name="awake_ac_toggle_long">Toggle AC Stay Awake Mode</string>
-    <string name="awake_ac_toggle_short">AC Awake</string>
-    <string name="on">On</string>
-    <string name="off">Off</string>
-    <string name="permission_denied_message">Awake for Debug will not function without it.</string>
-    <string name="permission_denied_title">Permission not granted</string>
-    <string name="permission_granted">Permission granted</string>
-    <string name="notification_service">ADB Notification Listener</string>
-
+    <!-- Permission screen   -->
     <string name="permission_needed">Permissions required!</string>
     <string name="permissons_rationale">This app requires two permissions to function correctly.</string>
     <string name="permissons_notification_access_title"><b>Notification Access</b></string>
     <string name="permissons_modify_settings_title"><b>Modify system settings</b></string>
     <string name="permissons_notification_access_message">Notification access is only used to detect if a notification is a Wireless or USB debugging notification.</string>
     <string name="permissons_modify_settings_message">Modifying system settings allows the app to modify the display timeout setting while Wireless or USB debugging is active.</string>
-    <string name="permissions_open_source_notice"><b>Note:</b> This app uses reproducible builds. The APKs published in the Play Store and F-Droid can be compared with the APK produced by building the openly available source code on GitHub.</string>
-
-    <string name="github_link">https://github.com/AfzalivE/AwakeDebug</string>
+    <string name="verifiable_builds_note"><b>Note:</b> This app uses verifiable builds. The APKs published in the Play Store can be compared with the APK produced by building the openly available source code on GitHub.</string>
     <string name="allow_notification_access">Allow Notification Access</string>
     <string name="allow_modify_settings">Allow Modifying System Settings</string>
     <string name="notification_access_granted">Notification access granted</string>
     <string name="modify_settings_granted">Modify system settings permission granted</string>
     <string name="next">Continue</string>
+
+    <!-- Toggle screen   -->
+    <string name="stay_awake_while_debugging">Stay awake while debugging</string>
     <string name="type_of_debugging">Type of debugging</string>
     <string name="first_and_second">%1$s &amp; %2$s</string>
     <string name="usb">USB</string>
     <string name="wireless">Wireless</string>
+    <string name="intro_1">This app allows you to keep your screen awake only when Wireless or USB debugging is active.</string>
+    <string name="intro_2">It switches to the previously set display timeout when debugging is not active.</string>
     <string name="debugging_status">Debugging status</string>
     <string name="not_active">Not active</string>
     <string name="display_timeout">Display timeout</string>
     <string name="unknown">Unknown</string>
+
+    <!-- About screen   -->
+    <string name="back_navigation_description">back navigation</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="licenses">Open Source Licenses</string>
+    <string name="author_header">Author</string>
+    <string name="fork_on_github">Fork on GitHub</string>
+    <string name="visit_my_website">Visit my website</string>
+    <string name="author_username">by &#64;AfzalivE</string>
+    <string name="github_repo_url">https://github.com/AfzalivE/AwakeDebug</string>
+    <string name="website_url">https://afzaln.com</string>
 
 </resources>

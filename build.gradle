@@ -6,10 +6,12 @@ buildscript {
     repositories {
         google()
         jcenter()
+        gradlePluginPortal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.0-alpha16'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:8.5.0"
     }
 }
 

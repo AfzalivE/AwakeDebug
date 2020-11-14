@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.afzaln.awakedebug.Injector
+import com.afzaln.awakedebug.databinding.AboutFragmentBinding
 import com.afzaln.awakedebug.databinding.PermissionFragmentBinding
 
 /**
@@ -17,7 +18,8 @@ import com.afzaln.awakedebug.databinding.PermissionFragmentBinding
  */
 class PermissionFragment : Fragment() {
 
-    private lateinit var binding: PermissionFragmentBinding
+    private var _binding: PermissionFragmentBinding? = null
+    private val binding get() = _binding!!
     private val systemSettings by lazy(Injector::systemSettings)
 
     companion object {
@@ -25,8 +27,13 @@ class PermissionFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = PermissionFragmentBinding.inflate(inflater)
+        _binding = PermissionFragmentBinding.inflate(inflater)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

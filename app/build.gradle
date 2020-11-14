@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id "com.github.plnice.canidropjetifier" version "0.5"
+    id 'com.mikepenz.aboutlibraries.plugin'
 }
 
 repositories {
@@ -20,6 +21,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         viewBinding true
     }
 
@@ -76,6 +78,7 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.1.1"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation "com.mikepenz:aboutlibraries:8.5.0"
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
 }

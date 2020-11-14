@@ -1,16 +1,10 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.App.Default">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorSecondary">@color/secondaryColor</item>
-        <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
-
-    <style name="Theme.App.Default" />
 
     <style name="PrimaryToolbar" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="android:background">@color/primaryColor</item>
@@ -26,7 +20,7 @@
     </style>
 
     <style name="GreyTextAppearance">
-        <item name="android:textColor">@color/darkGreyTextColor</item>
+        <item name="android:textColor">@color/lightGreyTextColor</item>
     </style>
 
 </resources>

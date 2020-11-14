@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.afzaln.awakedebug.DebuggingType
 import com.afzaln.awakedebug.Injector
 import com.afzaln.awakedebug.R
+import com.afzaln.awakedebug.databinding.AboutFragmentBinding
 import com.afzaln.awakedebug.databinding.ToggleFragmentBinding
 import com.google.android.material.button.MaterialButtonToggleGroup
 import kotlinx.coroutines.launch
@@ -32,13 +33,20 @@ class ToggleFragment : Fragment() {
         fun newInstance() = ToggleFragment()
     }
 
-    private lateinit var binding: ToggleFragmentBinding
+    private var _binding: ToggleFragmentBinding? = null
+    private val binding get() = _binding!!
+
     private val systemSettings by lazy(Injector::systemSettings)
     private val viewModel by viewModels<ToggleViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = ToggleFragmentBinding.inflate(inflater)
+        _binding = ToggleFragmentBinding.inflate(inflater)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onResume() {
