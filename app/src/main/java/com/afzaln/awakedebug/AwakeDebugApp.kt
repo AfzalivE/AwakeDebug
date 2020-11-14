@@ -7,7 +7,7 @@ import timber.log.Timber.DebugTree
 /**
  * Created by afzal on 15-06-03.
  */
-class MyApplication : Application() {
+class AwakeDebugApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Injector.init(this)
