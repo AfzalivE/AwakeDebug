@@ -16,7 +16,8 @@ Awake for Debug allows you to keep your screen awake while Wireless or USB debug
 It switches to the previously set display timeout when the device is unplugged.
 
 Permissions:
-- WRITE_SETTINGS to set the display timeout.
+- Notification access to monitor active debugging notifications
+- WRITE_SETTINGS to set the display timeout
 - INTERNET for Crashlytics (crash reports)
 
 Note: If the app crashes, please send the crash report so that I can fix it. No user-specific information is sent, only information related to the crash (stacktrace) and device information like OS version, free space, rooted/non-rooted, free RAM, etc, is sent.
