@@ -7,6 +7,7 @@ Awake for Debug ![Deploy CI](https://github.com/AfzalivE/AwakeDebug/workflows/De
 
 <p align="left">
   <img src="design/latest_playstore.png" alt="screenshot" height="30%" width="30%"/>
+  <img src="design/latest_playstore_dark.png" alt="screenshot" height="30%" width="30%"/>
 </p>
 
 
