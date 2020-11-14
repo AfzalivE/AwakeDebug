@@ -1,0 +1,4 @@
+type: Removed
+title: >
+  Removed support for API 26 and below due to API restrictions
+author: afzalive
