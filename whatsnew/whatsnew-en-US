@@ -3,3 +3,5 @@ ACTION_POWER_CONNECTED from background in API 26, this nifty app
 returns with support for the magic of wireless debugging on
 Android 11 and a newfound interest in debugging notifications
 to find out if debugging is active on the device. 🎉
+
+- Fixed incorrect display timeout in UI when opening the app sometimes
