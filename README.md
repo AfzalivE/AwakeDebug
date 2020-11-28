@@ -1,4 +1,4 @@
-Awake for Debug [![Deploy CI](https://github.com/AfzalivE/AwakeDebug/workflows/Deploy%20CI/badge.svg?branch=main)](https://github.com/AfzalivE/AwakeDebug/actions?query=workflow%3A%22Deploy+CI%22)
+Awake for Debug [![Deploy CI](https://github.com/AfzalivE/AwakeDebug/workflows/Deploy%20CI/badge.svg?branch=main)](https://github.com/AfzalivE/AwakeDebug/actions?query=workflow%3A%22Deploy+CI%22) [![Develop builds](https://github.com/AfzalivE/AwakeDebug/workflows/Develop%20builds/badge.svg?branch=develop)](https://github.com/AfzalivE/AwakeDebug/actions?query=workflow%3A%22Develop+builds%22)
 ==========
 <a href="https://play.google.com/store/apps/details?id=com.afzaln.awakedebug">
   <img alt="Get it on Google Play" width="20%"
@@ -16,7 +16,8 @@ Awake for Debug allows you to keep your screen awake while Wireless or USB debug
 It switches to the previously set display timeout when the device is unplugged.
 
 Permissions:
-- WRITE_SETTINGS to set the display timeout.
+- Notification access to monitor active debugging notifications
+- WRITE_SETTINGS to set the display timeout
 - INTERNET for Crashlytics (crash reports)
 
 Note: If the app crashes, please send the crash report so that I can fix it. No user-specific information is sent, only information related to the crash (stacktrace) and device information like OS version, free space, rooted/non-rooted, free RAM, etc, is sent.

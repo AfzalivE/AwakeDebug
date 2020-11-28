@@ -24,6 +24,11 @@ class ToggleController(
         toggle(prefs.awakeDebug)
     }
 
+    /**
+     * Extends or Restores system screen timeout based
+     * on the notifications, the awake debug toggle,
+     * and the current state of awake debug.
+     */
     fun toggle(shouldEnable: Boolean) {
         prefs.awakeDebug = shouldEnable
         val enabledDebugNotificationsExist = visibleDebugNotifications.value?.any {
@@ -31,11 +36,17 @@ class ToggleController(
         } ?: false
 
         if (shouldEnable && enabledDebugNotificationsExist) {
-            Timber.d("Debugging enabled")
-            systemSettings.extendScreenTimeout()
+            if (!prefs.awakeDebugActive) {
+                Timber.d("Debugging enabled")
+                systemSettings.extendScreenTimeout()
+                prefs.awakeDebugActive = true
+            }
         } else {
-            Timber.d("Debugging disabled")
-            systemSettings.restoreScreenTimeout()
+            if (prefs.awakeDebugActive) {
+                Timber.d("Debugging disabled")
+                systemSettings.restoreScreenTimeout()
+                prefs.awakeDebugActive = false
+            }
         }
     }
 }

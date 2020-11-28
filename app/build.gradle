@@ -16,8 +16,8 @@ android {
     defaultConfig {
         minSdkVersion 27
         targetSdkVersion 30
-        versionCode 12
-        versionName "2.0"
+        versionCode 13
+        versionName "2.1"
     }
 
     buildFeatures {
@@ -48,6 +48,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'

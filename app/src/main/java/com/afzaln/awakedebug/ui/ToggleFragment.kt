@@ -54,6 +54,8 @@ class ToggleFragment : Fragment() {
 
         if (!systemSettings.hasAllPermissions) {
             (activity as MainActivity).navigateToPermissionFragment()
+        } else {
+            systemSettings.refreshScreenTimeout()
         }
     }
 
@@ -72,6 +74,7 @@ class ToggleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // no wireless debugging type in versions below Android R
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             binding.debuggingTypeGroup.visibility = View.VISIBLE
             binding.debuggingTypeLabel.visibility = View.VISIBLE

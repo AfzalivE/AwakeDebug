@@ -47,8 +47,15 @@ class SystemSettings(
             return 0
         }
 
-    fun extendScreenTimeout() {
-        if (hasModifyPermission && screenOffTimeout < MAX_TIMEOUT) {
+    fun refreshScreenTimeout() {
+        if (hasModifyPermission) {
+            screenTimeoutLiveData.value = screenOffTimeout
+            Timber.d("Refreshed screen timeout to ${screenTimeoutLiveData.value}")
+        }
+    }
+
+    internal fun extendScreenTimeout() {
+        if (hasModifyPermission) {
             prefs.savedTimeout = screenOffTimeout
             Settings.System.putInt(app.contentResolver, Settings.System.SCREEN_OFF_TIMEOUT, MAX_TIMEOUT)
             Timber.d("Screen timeout is now $MAX_TIMEOUT")
@@ -56,8 +63,8 @@ class SystemSettings(
         }
     }
 
-    fun restoreScreenTimeout() {
-        if (hasModifyPermission && screenOffTimeout == MAX_TIMEOUT) {
+    internal fun restoreScreenTimeout() {
+        if (hasModifyPermission) {
             Settings.System.putInt(app.contentResolver, Settings.System.SCREEN_OFF_TIMEOUT, prefs.savedTimeout)
             Timber.d("Screen timeout is now ${prefs.savedTimeout}")
             screenTimeoutLiveData.value = prefs.savedTimeout

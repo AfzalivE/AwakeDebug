@@ -9,6 +9,7 @@ import timber.log.Timber
 private const val KEY_USB_DEBUG_ENABLED = "UsbDebugEnabled"
 private const val KEY_WIFI_DEBUG_ENABLED = "WifiDebugEnabled"
 private const val KEY_AWAKE_DEBUG_ENABLED = "AwakeDebugEnabled"
+private const val KEY_AWAKE_DEBUG_ACTIVE = "AwakeDebugActive"
 private const val KEY_DISPLAY_TIMEOUT = "DisplayTimeout"
 
 /**
@@ -61,6 +62,17 @@ class Prefs(val app: AwakeDebugApp) {
         set(value) {
             Timber.d("Setting $KEY_AWAKE_DEBUG_ENABLED: %s", value)
             preferences.edit().putBoolean(KEY_AWAKE_DEBUG_ENABLED, value).apply()
+        }
+
+    var awakeDebugActive: Boolean
+        get() {
+            val awakeDebugActive = preferences.getBoolean(KEY_AWAKE_DEBUG_ACTIVE, false)
+            Timber.d("$KEY_AWAKE_DEBUG_ACTIVE: %s", awakeDebugActive)
+            return awakeDebugActive
+        }
+        set(value) {
+            Timber.d("Setting $KEY_AWAKE_DEBUG_ACTIVE: %s", value)
+            preferences.edit().putBoolean(KEY_AWAKE_DEBUG_ACTIVE, value).apply()
         }
 
     var savedTimeout: Int
