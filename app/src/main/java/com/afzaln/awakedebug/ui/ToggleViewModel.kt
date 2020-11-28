@@ -47,7 +47,6 @@ class ToggleViewModel(
     }
 
     fun setDebugAwake(shouldEnable: Boolean) {
-        prefs.awakeDebug = shouldEnable
         toggleController.toggle(shouldEnable)
         shortcuts.updateShortcuts()
 

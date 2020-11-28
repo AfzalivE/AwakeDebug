@@ -47,11 +47,6 @@ class SystemSettings(
             return 0
         }
 
-    // this can also be true if user has manually
-    // selected 30 minutes as display timeout
-    private val isAwakeDebugActive: Boolean
-        get() = screenOffTimeout == MAX_TIMEOUT
-
     fun refreshScreenTimeout() {
         if (hasModifyPermission) {
             screenTimeoutLiveData.value = screenOffTimeout
@@ -59,7 +54,7 @@ class SystemSettings(
         }
     }
 
-    fun extendScreenTimeout() {
+    internal fun extendScreenTimeout() {
         if (hasModifyPermission) {
             prefs.savedTimeout = screenOffTimeout
             Settings.System.putInt(app.contentResolver, Settings.System.SCREEN_OFF_TIMEOUT, MAX_TIMEOUT)
@@ -68,7 +63,7 @@ class SystemSettings(
         }
     }
 
-    fun restoreScreenTimeout() {
+    internal fun restoreScreenTimeout() {
         if (hasModifyPermission) {
             Settings.System.putInt(app.contentResolver, Settings.System.SCREEN_OFF_TIMEOUT, prefs.savedTimeout)
             Timber.d("Screen timeout is now ${prefs.savedTimeout}")
