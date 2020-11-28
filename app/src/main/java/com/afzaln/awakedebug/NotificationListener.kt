@@ -30,7 +30,7 @@ class NotificationListener : NotificationListenerService() {
 
             toggleController.toggleFromNotification(visibleDebugNotifications)
         } catch (ex: SecurityException) {
-            Timber.e(ex)
+            Timber.e(ex, "Unable to get active notifications")
         }
     }
 }
