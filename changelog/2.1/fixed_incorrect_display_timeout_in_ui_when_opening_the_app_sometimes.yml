@@ -1,0 +1,4 @@
+type: Fixed
+title: >
+  Fixed incorrect display timeout in UI when opening the app sometimes
+author: afzalive
