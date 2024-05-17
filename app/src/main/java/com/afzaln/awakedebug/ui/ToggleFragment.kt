@@ -8,21 +8,18 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.afzaln.awakedebug.DebuggingType
 import com.afzaln.awakedebug.Injector
 import com.afzaln.awakedebug.R
-import com.afzaln.awakedebug.databinding.AboutFragmentBinding
 import com.afzaln.awakedebug.databinding.ToggleFragmentBinding
 import com.google.android.material.button.MaterialButtonToggleGroup
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.Period
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
-import kotlin.time.milliseconds
-import kotlin.time.minutes
-import kotlin.time.seconds
 
 /**
  * View responsible for allowing the user
@@ -40,7 +37,11 @@ class ToggleFragment : Fragment() {
     private val systemSettings by lazy(Injector::systemSettings)
     private val viewModel by viewModels<ToggleViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = ToggleFragmentBinding.inflate(inflater)
         return binding.root
     }
@@ -60,12 +61,13 @@ class ToggleFragment : Fragment() {
         }
     }
 
-    private val groupChangeListener: (group: MaterialButtonToggleGroup, checkedId: Int, isChecked: Boolean) -> Unit = { _, checkedId, isChecked ->
-        when (checkedId) {
-            R.id.usb_debugging -> viewModel.toggleUsbDebugging(isChecked)
-            R.id.wifi_debugging -> viewModel.toggleWifiDebugging(isChecked)
+    private val groupChangeListener: MaterialButtonToggleGroup.OnButtonCheckedListener =
+        MaterialButtonToggleGroup.OnButtonCheckedListener { _, checkedId, isChecked ->
+            when (checkedId) {
+                R.id.usb_debugging -> viewModel.toggleUsbDebugging(isChecked)
+                R.id.wifi_debugging -> viewModel.toggleWifiDebugging(isChecked)
+            }
         }
-    }
 
     private val toggleClickListener: (v: View) -> Unit = {
         viewModel.setDebugAwake(binding.toggleDebug.isChecked)
@@ -85,36 +87,46 @@ class ToggleFragment : Fragment() {
         }
 
         binding.toggleDebug.setOnClickListener(toggleClickListener)
-        binding.debuggingTypeGroup.addOnButtonCheckedListener(groupChangeListener)
 
-        viewModel.uiStateLiveData.observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
-                val displayTimeoutMs = it.screenTimeout.milliseconds
-                val displayTimeout = if (displayTimeoutMs.inWholeMinutes > 0) {
-                    "${displayTimeoutMs.inWholeMinutes}m"
-                } else {
-                    "${displayTimeoutMs.inWholeSeconds}s"
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.uiStateFlow.collect { state ->
+                    val displayTimeoutMs = state.screenTimeout.milliseconds
+                    val displayTimeout = if (displayTimeoutMs.inWholeMinutes > 0) {
+                        "${displayTimeoutMs.inWholeMinutes}m"
+                    } else {
+                        "${displayTimeoutMs.inWholeSeconds}s"
+                    }
+                    binding.toggleDebug.isChecked = state.debugAwake
+
+                    updateDebuggingTypeButtons(state.usbDebugging, state.wifiDebugging)
+
+                    binding.displayTimeout.text = displayTimeout
+                    Timber.d("Screen timeout UI: ${state.screenTimeout}")
+                    binding.debuggingStatus.text = getDebuggingStatusString(state.debuggingStatus)
                 }
-                binding.toggleDebug.isChecked = it.debugAwake
-                binding.usbDebugging.isChecked = it.usbDebugging
-                binding.wifiDebugging.isChecked = it.wifiDebugging
-                binding.displayTimeout.text = displayTimeout
-                Timber.d("Screen timeout UI: ${it.screenTimeout}")
-                binding.debuggingStatus.text = getDebuggingStatusString(it.debuggingStatus)
             }
         }
     }
 
+    private fun updateDebuggingTypeButtons(usbDebugging: Boolean, wifiDebugging: Boolean) {
+        // Remove listeners before updating so that the listener doesn't get called when we update.
+        binding.debuggingTypeGroup.clearOnButtonCheckedListeners()
+        binding.usbDebugging.isChecked = usbDebugging
+        binding.wifiDebugging.isChecked = wifiDebugging
+        binding.debuggingTypeGroup.addOnButtonCheckedListener(groupChangeListener)
+    }
+
     private fun getDebuggingStatusString(debuggingStatus: List<DebuggingType>): CharSequence {
         return when {
-            debuggingStatus.isEmpty()                     -> getString(DebuggingType.NONE.stringRes())
-            debuggingStatus.size == 1                     -> getString(debuggingStatus.first().stringRes())
+            debuggingStatus.isEmpty() -> getString(DebuggingType.NONE.stringRes())
+            debuggingStatus.size == 1 -> getString(debuggingStatus.first().stringRes())
             debuggingStatus == DebuggingType.usbWifiTypes -> getString(
                 R.string.first_and_second,
                 getString(DebuggingType.USB.stringRes()),
                 getString(DebuggingType.WIFI.stringRes())
             )
-            else                                          -> getString(R.string.not_active)
+            else -> getString(R.string.not_active)
         }
     }
 

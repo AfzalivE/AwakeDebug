@@ -1,13 +1,13 @@
 package com.afzaln.awakedebug.ui
 
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.afzaln.awakedebug.DebuggingType
 import com.afzaln.awakedebug.Injector
 import com.afzaln.awakedebug.ToggleController
 import com.afzaln.awakedebug.data.Prefs
 import com.afzaln.awakedebug.data.SystemSettings
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 
 /**
  * Responsible for handling logic related to
@@ -19,42 +19,40 @@ class ToggleViewModel(
     private val systemSettings: SystemSettings = Injector.systemSettings,
     private val prefs: Prefs = Injector.prefs,
     private val shortcuts: Shortcuts = Injector.shortcuts,
-    private val toggleController: ToggleController = Injector.toggleController
+    private val toggleController: ToggleController = Injector.toggleController,
 ) : ViewModel() {
 
-    private val settingsLiveData = MutableLiveData(SettingsUiState())
+    private val settingsFlow = MutableStateFlow(SettingsUiState())
 
-    val uiStateLiveData = MediatorLiveData<SettingsUiState>().apply {
-        addSource(settingsLiveData) { emit () }
-        addSource(toggleController.visibleDebugNotifications) { emit() }
-        addSource(systemSettings.screenTimeoutLiveData) { emit() }
-    }
-
-    private fun MediatorLiveData<SettingsUiState>.emit() {
-        val settings = settingsLiveData.value ?: return
-        val activeNotification = toggleController.visibleDebugNotifications.value ?: return
-        val screenTimeout = systemSettings.screenTimeoutLiveData.value ?: return
-
-        value = settings.copy(
+    val uiStateFlow = combine(
+        settingsFlow,
+        toggleController.visibleDebugNotificationsFlow,
+        systemSettings.screenTimeoutFlow,
+    ) { settings, activeNotification, screenTimeout ->
+        settings.copy(
             screenTimeout = screenTimeout,
             debuggingStatus = activeNotification
         )
     }
 
     init {
-        val settingsUiState = SettingsUiState(prefs.awakeDebug, prefs.usbDebugging, prefs.wifiDebugging)
-        settingsLiveData.value = settingsUiState
+        val settingsUiState = SettingsUiState(
+            debugAwake = prefs.awakeDebug,
+            usbDebugging = prefs.usbDebugging,
+            wifiDebugging = prefs.wifiDebugging,
+        )
+        settingsFlow.value = settingsUiState
     }
 
     fun setDebugAwake(shouldEnable: Boolean) {
         toggleController.toggle(shouldEnable)
         shortcuts.updateShortcuts()
 
-        settingsLiveData.value = SettingsUiState(
+        settingsFlow.value = SettingsUiState(
             debugAwake = prefs.awakeDebug,
             usbDebugging = prefs.usbDebugging,
             wifiDebugging = prefs.wifiDebugging,
-            screenTimeout = systemSettings.screenTimeoutLiveData.value ?: 0
+            screenTimeout = systemSettings.screenTimeoutFlow.value ?: 0
         )
     }
 
@@ -73,6 +71,6 @@ class ToggleViewModel(
         val usbDebugging: Boolean = true,
         val wifiDebugging: Boolean = true,
         val screenTimeout: Int = 0,
-        val debuggingStatus: List<DebuggingType> = listOf(DebuggingType.NONE)
+        val debuggingStatus: List<DebuggingType> = listOf(DebuggingType.NONE),
     )
 }
