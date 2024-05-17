@@ -1,0 +1,12 @@
+[versions]
+kotlin = "2.0.0-RC3"
+agp = "8.4.0"
+aboutlibraries = "11.2.0-a01"
+
+[libraries]
+aboutlibraries = { group = "com.mikepenz", name = "aboutlibraries", version.ref = "aboutlibraries" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries" }

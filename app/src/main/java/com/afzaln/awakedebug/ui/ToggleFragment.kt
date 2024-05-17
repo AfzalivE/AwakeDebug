@@ -18,6 +18,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.Period
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
 import kotlin.time.minutes
@@ -88,10 +89,16 @@ class ToggleFragment : Fragment() {
 
         viewModel.uiStateLiveData.observe(viewLifecycleOwner) {
             lifecycleScope.launch {
+                val displayTimeoutMs = it.screenTimeout.milliseconds
+                val displayTimeout = if (displayTimeoutMs.inWholeMinutes > 0) {
+                    "${displayTimeoutMs.inWholeMinutes}m"
+                } else {
+                    "${displayTimeoutMs.inWholeSeconds}s"
+                }
                 binding.toggleDebug.isChecked = it.debugAwake
                 binding.usbDebugging.isChecked = it.usbDebugging
                 binding.wifiDebugging.isChecked = it.wifiDebugging
-                binding.displayTimeout.text = it.screenTimeout.milliseconds.inMinutes.minutes.toString()
+                binding.displayTimeout.text = displayTimeout
                 Timber.d("Screen timeout UI: ${it.screenTimeout}")
                 binding.debuggingStatus.text = getDebuggingStatusString(it.debuggingStatus)
             }

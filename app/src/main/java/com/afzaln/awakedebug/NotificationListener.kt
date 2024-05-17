@@ -49,7 +49,7 @@ private fun Notification.getDebugNotificationType(): DebuggingType {
     val adbActiveNotificationTitle = getSystemString("adb_active_notification_title")
     val wifiAdbActiveNotificationTitle = getSystemString("adbwifi_active_notification_title")
 
-    return when (extras["android.title"]) {
+    return when (extras.getString("android.title")) {
         adbActiveNotificationTitle -> DebuggingType.USB
         wifiAdbActiveNotificationTitle -> DebuggingType.WIFI
         else                           -> DebuggingType.NONE

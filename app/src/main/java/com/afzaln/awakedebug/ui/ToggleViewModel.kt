@@ -30,7 +30,7 @@ class ToggleViewModel(
         addSource(systemSettings.screenTimeoutLiveData) { emit() }
     }
 
-    private fun MediatorLiveData<*>.emit() {
+    private fun MediatorLiveData<SettingsUiState>.emit() {
         val settings = settingsLiveData.value ?: return
         val activeNotification = toggleController.visibleDebugNotifications.value ?: return
         val screenTimeout = systemSettings.screenTimeoutLiveData.value ?: return
