@@ -1,9 +1,9 @@
 package com.afzaln.awakedebug
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.afzaln.awakedebug.data.Prefs
 import com.afzaln.awakedebug.data.SystemSettings
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 
 /**
@@ -13,14 +13,15 @@ import timber.log.Timber
  */
 class ToggleController(
     private val prefs: Prefs = Injector.prefs,
-    private val systemSettings: SystemSettings = Injector.systemSettings
+    private val systemSettings: SystemSettings = Injector.systemSettings,
 ) {
-    private val _visibleDebugNotifications: MutableLiveData<List<DebuggingType>> = MutableLiveData(listOf())
-    val visibleDebugNotifications: LiveData<List<DebuggingType>>
-        get() = _visibleDebugNotifications
+    private val _visibleDebugNotificationsFlow: MutableStateFlow<List<DebuggingType>> =
+        MutableStateFlow(listOf())
+    val visibleDebugNotificationsFlow: StateFlow<List<DebuggingType>>
+        get() = _visibleDebugNotificationsFlow
 
     fun toggleFromNotification(visibleDebugNotifications: List<DebuggingType>) {
-        _visibleDebugNotifications.value = visibleDebugNotifications
+        _visibleDebugNotificationsFlow.value = visibleDebugNotifications
         toggle(prefs.awakeDebug)
     }
 
@@ -31,9 +32,9 @@ class ToggleController(
      */
     fun toggle(shouldEnable: Boolean) {
         prefs.awakeDebug = shouldEnable
-        val enabledDebugNotificationsExist = visibleDebugNotifications.value?.any {
+        val enabledDebugNotificationsExist = visibleDebugNotificationsFlow.value.any {
             it in prefs.enabledDebuggingTypes
-        } ?: false
+        }
 
         if (shouldEnable && enabledDebugNotificationsExist) {
             if (!prefs.awakeDebugActive) {

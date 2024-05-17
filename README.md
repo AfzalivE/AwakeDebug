@@ -22,6 +22,12 @@ Permissions:
 
 Note: If the app crashes, please send the crash report so that I can fix it. No user-specific information is sent, only information related to the crash (stacktrace) and device information like OS version, free space, rooted/non-rooted, free RAM, etc, is sent.
 
+### Contributors
+
+Thank you for your contributions!
+
+- @dmytroKarataiev
+- @drmercer
 
 ### Contributing
 All contributions are welcome!
