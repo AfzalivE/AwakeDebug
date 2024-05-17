@@ -30,7 +30,7 @@ android {
     signingConfigs {
         create("release") {
             val keyProps = Properties()
-            val keyProperties = file("../keystore.roperties")
+            val keyProperties = file("../keystore.properties")
             if (keyProperties.exists()) {
                 // when building locally, use signing properties from keystore.properties
                 keyProps.load(FileInputStream(keyProperties))

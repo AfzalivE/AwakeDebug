@@ -48,3 +48,5 @@ app/crashlytics.properties
 com_crashlytics_export_strings.xml
 /.idea/
 *.iml
+
+*.keystore

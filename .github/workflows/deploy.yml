@@ -35,7 +35,7 @@ jobs:
           echo '${{ secrets.RELEASE_KEYSTORE }}' | base64 -di > awakedebug.keystore
         
       - name: Build Release APK
-        run: ./gradlew assembleRelease
+        run: ./gradlew bundleRelease
         env:
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
             name: app
-            path: app/build/outputs/apk/release/app-release.apk
+            path: app/build/outputs/bundle/release/app-release.aab
             
       - name: Deploy to Google Play Alpha
         id: deploy
@@ -52,6 +52,6 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.afzaln.awakedebug
-          releaseFiles: app/build/outputs/apk/release/app-release.apk
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: alpha
           whatsNewDirectory: whatsnew/
