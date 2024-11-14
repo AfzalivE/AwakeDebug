@@ -1,9 +1,10 @@
 Awake for Debug [![Deploy CI](https://github.com/AfzalivE/AwakeDebug/workflows/Deploy%20CI/badge.svg?branch=main)](https://github.com/AfzalivE/AwakeDebug/actions?query=workflow%3A%22Deploy+CI%22) [![Develop builds](https://github.com/AfzalivE/AwakeDebug/workflows/Develop%20builds/badge.svg?branch=develop)](https://github.com/AfzalivE/AwakeDebug/actions?query=workflow%3A%22Develop+builds%22)
 ==========
-<a href="https://play.google.com/store/apps/details?id=com.afzaln.awakedebug">
-  <img alt="Get it on Google Play" width="20%"
-       src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" />
-</a>
+
+I've decided to remove this app from Google Play for privacy reasons. Please build the app yourself :)
+
+<img alt="Get it on Google Play" width="20%"
+     src="design/No-Google-Play.png" />
 
 <p align="left">
   <img src="design/latest_playstore.png" alt="screenshot" height="30%" width="30%"/>
