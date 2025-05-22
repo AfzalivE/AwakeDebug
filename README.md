@@ -23,6 +23,29 @@ Permissions:
 
 Note: If the app crashes, please send the crash report so that I can fix it. No user-specific information is sent, only information related to the crash (stacktrace) and device information like OS version, free space, rooted/non-rooted, free RAM, etc, is sent.
 
+## Building from source
+
+To build the Awake for Debug application from source, follow these steps:
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/AfzalivE/AwakeDebug.git
+    ```
+2.  **Navigate to the project directory:**
+    ```bash
+    cd AwakeDebug
+    ```
+3.  **Build the application using Gradle:**
+    *   For a debug build:
+        ```bash
+        ./gradlew assembleDebug
+        ```
+    *   For a release build (you will need to set up signing configurations):
+        ```bash
+        ./gradlew assembleRelease
+        ```
+    The compiled APK files will be located in the `app/build/outputs/apk/` directory.
+
 ### Contributors
 
 Thank you for your contributions!
